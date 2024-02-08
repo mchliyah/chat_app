@@ -1,0 +1,3 @@
+the users are not geting registred and the login need som pages 
+the react part is not included must be handled befor progress 
+need to check redirection if it not cosed by database creation at reghister 
