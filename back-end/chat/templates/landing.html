@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App - Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            color: #333;
+            text-align: center;
+            padding-top: 100px; /* Adjust as needed */
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #4CAF50;
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .cta-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Chat App</h1>
+    <p>Join our community and start chatting today!</p>
+    <a href="{% url 'signup' %}" class="cta-button">Sign Up</a>
+    <a href="{% url 'login' %}" class="cta-button">Login</a>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App - Home</title>
+    <style>
+        /* Add your custom CSS styles here */
+        #sidebar {
+            float: left;
+            width: 200px;
+            height: 100%;
+            background-color: #f0f0f0;
+        }
+        #main-content {
+            margin-left: 220px; /* Adjust as needed */
+            padding: 20px;
+        }
+        #message-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        #message-input {
+            width: calc(100% - 70px);
+            padding: 5px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+        #send-button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Chat App!</h1>
+    <div id="sidebar">
+        <h2>Users</h2>
+        <!-- Add user list here -->
+        <ul>
+            {% for user in users %}
+            <li>{{ user.username }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="main-content">
+        <h2>Messages</h2>
+        <!-- Add message display here -->
+        <div id="message-container">
+            {% for message in messages %}
+            <div>{{ message.sender }}: {{ message.content }}</div>
+            {% endfor %}
+        </div>
+        <!-- Add message input form here -->
+        <form id="message-form" action="{% url 'send_message' %}" method="post">
+            {% csrf_token %}
+            <input type="text" id="message-input" name="message" placeholder="Type your message...">
+            <button id="send-button" type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>
