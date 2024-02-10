@@ -1,17 +1,34 @@
-FROM python:3.8-alpine
+FROM python:3.11-alpine
+
+RUN adduser -D myuser
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-WORKDIR /app/backend
+WORKDIR /chat_app/back-end
 
-COPY requirements.txt /app/backend/
+RUN apk add --no-cache postgresql-libs
 
-# Build psycopg2-binary from source -- add required required dependencies
-RUN apk add --virtual .build-deps --no-cache postgresql-dev gcc python3-dev musl-dev && \
-        pip install --no-cache-dir -r requirements.txt && \
-        apk --purge del .build-deps
+RUN pip install --no-cache-dir virtualenv
 
-COPY . /app/backend/
+RUN python -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+
+RUN chown -R myuser:myuser /venv
+
+USER myuser
+
+COPY requirements.txt /chat_app/back-end/
+USER root
+RUN pip install --upgrade pip && \
+        apk add --no-cache postgresql-libs && \
+        apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
+        pip install --no-cache-dir psycopg2-binary && \
+        apk --purge del .build-deps \
+        && pip install -r requirements.txt
+
+USER myuser
+
+COPY . /chat_app/back-end/
 
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

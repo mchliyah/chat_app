@@ -4,6 +4,7 @@ version: '3.9'
 services:
   db:
     image: postgres:14-alpine
+    init: true
     ports:
       - '5432:5432'
 
@@ -15,25 +16,26 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data/
 
-  frontend:
+  front-end:
     build:
-      context: ./frontend
+      context: ./front-end
       dockerfile: Dockerfile
 
+    init: true
     ports:
       - '3000:3000'
 
     volumes:
-      - ./frontend:/app/frontend
+      - ./front-end:/app/front-end
 
     depends_on:
-      - backend
+      - back-end
 
-  backend: 
+  back-end: 
     build: 
-      context: ./backend
+      context: ./back-end
       dockerfile: Dockerfile
-
+    init: true
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
@@ -43,7 +45,7 @@ services:
       - '8000:8000'
 
     volumes:
-      - ./backend:/app/backend
+      - ./back-end:/app/back-end
 
     depends_on:
       - db

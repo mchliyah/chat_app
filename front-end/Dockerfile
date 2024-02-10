@@ -1,10 +1,11 @@
 FROM node:16-alpine
 
-WORKDIR /app/frontend/
+WORKDIR /chat_app/front-end/
 
-COPY package*.json /app/frontend/
+COPY package*.json /chat_app/front-end/
+RUN npm update -g npm
 RUN npm install
 
-COPY . /app/frontend/
+COPY . /chat_app/front-end/
 
 CMD ["npm", "start"]
