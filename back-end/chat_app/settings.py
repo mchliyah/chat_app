@@ -41,10 +41,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "chat.apps.ChatConfig", # This is the app we created
     "channels",
+    "corsheaders",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -81,13 +84,23 @@ ASGI_APPLICATION = 'chat_app.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -118,6 +131,8 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+CORS_ALLOW_ALL_ORIGINS=True
 
 
 # Static files (CSS, JavaScript, Images)

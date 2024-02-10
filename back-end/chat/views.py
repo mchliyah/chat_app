@@ -4,6 +4,17 @@ from django.http import HttpResponse
 from .models import Room, Message, User, UserRoom
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+#from rest_framework.decorators import api_view # need to be installed when i get back to internet 
+#from rest_framework.response import Response # instalation too
+
+
+#TODO: i have to test this if it works after instalation 
+
+# @api_view(['GET'])
+# def send_some_data(request):
+#     return Response({
+#         "data": "Hello from django backend"
+#     })
 
 def index(request):
     if request.method == 'POST':
