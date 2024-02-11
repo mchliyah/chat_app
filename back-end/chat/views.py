@@ -1,20 +1,37 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from .models import Room, Message, User, UserRoom
+from .models import  Message, User#, UserRoom, Room,
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from rest_framework.decorators import api_view # need to be installed when i get back to internet 
-from rest_framework.response import Response # instalation too
+from rest_framework.decorators import api_view 
+from rest_framework.decorators import APIView 
+from rest_framework.response import Response 
+from .serializer import *
 
 
 #TODO: i have to test this if it works after instalation 
 
 @api_view(['GET'])
 def send_some_data(request):
+    print ("i am sending data ")
     return Response({
         "data": "Hello from django backend"
     })
+
+class UserView(APIView):
+    def get(self, request):
+        output = [{"name": output.name,
+                   "email":output.email}
+                   for output in User.objects.all()]
+        return Response(output)
+    def post(selfe, request):
+        serializer = ReacSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+
+
 
 def index(request):
     if request.method == 'POST':
@@ -31,7 +48,7 @@ def index(request):
     return render(request, "index.html", {})
 
 def login(request):
-    return render(request, "login.html", {
+    return redirect(request, "login.html", {
         "username": request.user.username, # if the user is not loged in it will be an empty string
     })
 
@@ -40,11 +57,11 @@ def login(request):
 def home(request):
     return render(request, "home.html")
 
-def room(request, room_name):
-    return render(request, "room.html", {
-        "room_name": room_name,
-        "username": request.user.username,
-    })
+# def room(request, room_name):
+#     return render(request, "room.html", {
+#         "room_name": room_name,
+#         "username": request.user.username,
+#     })
 
 def signup(request):
     if request.method == 'POST':
@@ -57,9 +74,9 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
-def get_rooms(request):
-    rooms = Room.objects.all()
-    return HttpResponse(rooms)
+# def get_rooms(request):
+#     rooms = Room.objects.all()
+#     return HttpResponse(rooms)
 
 def get_messages(request, room_name):
     messages = Message.objects.filter(room=room_name)
@@ -69,9 +86,9 @@ def get_users(request):
     users = User.objects.all()
     return HttpResponse(users)
 
-def get_user_rooms(request, username):
-    user_rooms = UserRoom.objects.filter(user__username=username)
-    return HttpResponse(user_rooms)
+# def get_user_rooms(request, username):
+#     user_rooms = UserRoom.objects.filter(user__username=username)
+#     return HttpResponse(user_rooms)
 
 
 def register(request):
