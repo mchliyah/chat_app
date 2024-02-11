@@ -19,11 +19,12 @@ class Message(models.Model):
 
 class User(models.Model):
     name = models.CharField(max_length=15)
-    email = models.CharField(max_length=15)
+    email = models.CharField(max_length=30)
     password = models.CharField(max_length=25)
     
     def __str__(self):
         return self.name
+
 
 # class UserRoom(models.Model):
 #     user = models.CharField(max_length=100)

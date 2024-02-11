@@ -1,8 +1,15 @@
 from rest_framework import serializers
 from .models import *
 
-class ReacSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        feilds = ['name', "email"]
+        fields = '__all__'
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'
+
+
 

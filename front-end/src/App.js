@@ -1,60 +1,44 @@
-import './App.css';
-import axios from 'axios'
-import React from 'react';
+// App.js
 
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import LoginPage from './LoginPage';
+import HomePage from './HomePage';
 
 class App extends React.Component {
-  state = {details:[],}
+  state = {
+    isAuthenticated: false, // Set the initial authentication status to false
+  };
 
-  componentDidMount(){
-    let data;
-    axios.get('http://localhost:8000/test')
-      .then(res => {
-        data = res.data;
-        this.setState({
-          details:data
-        });
-      })
-      .catch(err => { })
+  // Simulate a function to check the user's authentication status
+  checkAuthentication = () => {
+    //ned to get the user data from the server
+    // save the data and set the isAuthenticated to true
+    
+    this.setState({ isAuthenticated });
+  };
+
+  componentDidMount() {
+    // Perform initial authentication check when the component mounts
+    this.checkAuthentication();
   }
-  render () {
-    return(
-      <div>
-        <header>data geted from django </header>
-        <hr></hr>
-        {this.state.details.map((outtput, id) => (
-          <div key={id}>
-            <div>
-            <h1>{outtput.name}</h1>
-            <h2>{outtput.email}</h2>
-          </div>
-          </div>
-        ))}
-      </div>
+
+  render() {
+    const { isAuthenticated } = this.state;
+
+    return (
+      <Router>
+        <Switch>
+          <Route path="/login">
+            {isAuthenticated ? <Redirect to="/" /> : <LoginPage />}
+          </Route>
+          <Route path="/">
+            {isAuthenticated ? <HomePage /> : <Redirect to="/login" />}
+          </Route>
+        </Switch>
+      </Router>
     );
   }
 }
-
-// function App() {
-//   const [data, setData] = useState(null);
-
-//   useEffect(() => {
-//     fetch('http://localhost:8000')
-//       .then(res => res.json())
-//       .then(data => setData(data.data));
-//   })
-
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <h1>An Awesome Blog </h1>
-//         <h3>this is just a test i will show data from </h3>
-
-//         <p>{data}</p>
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;
