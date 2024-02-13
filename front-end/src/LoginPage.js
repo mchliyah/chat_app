@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const LoginPage = ({ onLogin }) => {
+function LoginPage ({ onLogin }) {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
