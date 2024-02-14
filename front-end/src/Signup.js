@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
-const SignupForm = () => {
+import { Link } from 'react-router-dom';
+const Signup = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -17,11 +17,12 @@ const SignupForm = () => {
     axios.post('http://localhost:8000/signup', formData)
       .then(res => {
         console.log('User registered successfully:', res.data);
-        // Redirect to login page or perform any other action after successful registration
+        <Link to="/Login" />;
       })
       .catch(err => {
         console.error('Error registering user:', err);
         // Handle error
+        
       });
   };
 
@@ -47,4 +48,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default Signup;
