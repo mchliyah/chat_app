@@ -8,13 +8,20 @@ services:
     ports:
       - '5432:5432'
 
+    working_dir: /chat_app/back-end/data/db
+
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
+      - DB_NAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_USER=postgres
       - POSTGRES_DB=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
 
     volumes:
       - ./data/db:/var/lib/postgresql/data/
+    networks:
+      - my_network
 
   front-end:
     build:
@@ -30,6 +37,8 @@ services:
 
     depends_on:
       - back-end
+    networks:
+      - my_network
 
   back-end: 
     build: 
@@ -49,3 +58,9 @@ services:
 
     depends_on:
       - db
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge

@@ -9,7 +9,7 @@ urlpatterns = [
     path("home/", views.home, name="home"),  # URL for the home page
     path("login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"),  # URL for logging in
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),  # URL for logging out
-    path("signup/", views.signup, name="signup"),
+    path("signup", views.signup, name="signup"),
     path("register/", views.register, name="register"),  # URL for registering
     # path("get_rooms/", views.get_rooms, name="get_rooms"),  # URL for getting all the chat rooms
     #path("get_messages/<str:room_name>/", views.get_messages, name="get_messages"),  # URL for getting all the messages in a chat room
