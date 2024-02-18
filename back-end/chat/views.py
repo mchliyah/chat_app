@@ -7,7 +7,9 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view 
 from rest_framework.decorators import APIView 
 from rest_framework.response import Response 
+from django.views.decorators.csrf import csrf_exempt
 from .serializer import *
+from .forms import UserCreationForm
 
 
 #TODO: i have to test this if it works after instalation 
@@ -48,7 +50,7 @@ class UserView(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
-
+@csrf_exempt
 def index(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -63,6 +65,7 @@ def index(request):
             # You might want to display an error message in the template
     return render(request, "index.html", {})
 
+@csrf_exempt
 def login(request):
     return redirect(request, "login.html", {
         "username": request.user.username, # if the user is not loged in it will be an empty string
@@ -81,11 +84,15 @@ def home(request):
 
 def signup(request):
     if request.method == 'POST':
+        print ("methiod is post: ", request.POST.get('username'))
         form = UserCreationForm(request.POST)
+        # print (form)
         if form.is_valid():
+            print ("form is valid")
             form.save()
-            # Redirect to the login page after successful signup (not working yet need to check it)
             return redirect('login')
+        else:
+            print ("form is not valid")
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
@@ -106,7 +113,7 @@ def get_users(request):
 #     user_rooms = UserRoom.objects.filter(user__username=username)
 #     return HttpResponse(user_rooms)
 
-
+@csrf_exempt
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -119,6 +126,7 @@ def register(request):
 
 
 @login_required
+@csrf_exempt
 def send_message(request):
     if request.method == 'POST':
         message_text = request.POST.get('message_text')

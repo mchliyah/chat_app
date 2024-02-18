@@ -20,7 +20,7 @@ from chat.views import *
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin", admin.site.urls),
     path("test", UserView.as_view(), name="user_view"),
     path("", include("chat.urls")),
     # path("test/", include("chat.urls")),

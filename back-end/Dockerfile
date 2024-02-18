@@ -2,6 +2,8 @@ FROM python:3.11-alpine
 
 RUN adduser -D myuser
 
+# the contex is the root of the project
+
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
@@ -18,7 +20,7 @@ RUN chown -R myuser:myuser /venv
 
 USER myuser
 
-COPY requirements.txt /chat_app/back-end/
+COPY ./back-end/requirements.txt /chat_app/back-end/requirements.txt
 USER root
 RUN pip install --upgrade pip && \
         apk add --no-cache postgresql-libs && \
@@ -29,7 +31,7 @@ RUN pip install --upgrade pip && \
 
 USER myuser
 
-COPY . /chat_app/back-end/
+COPY ./back-end/ /chat_app/back-end/
 
 # RUN python manage.py makemigrations
 # RUN python manage.py migrate

@@ -16,15 +16,13 @@ class Message(models.Model):
     def __str__(self):
         return self.user
 
-
 class User(models.Model):
-    name = models.CharField(max_length=15)
-    email = models.CharField(max_length=30)
-    password = models.CharField(max_length=25)
-    
-    def __str__(self):
-        return self.name
+    username = models.CharField(max_length=15) 
+    email = models.EmailField(max_length=30)    # i did't know that email is a field in django
+    password = models.CharField(max_length=128) 
 
+    def __str__(self):
+        return self.username
 
 # class UserRoom(models.Model):
 #     user = models.CharField(max_length=100)

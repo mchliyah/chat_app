@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    password: ''
+    password: '',
+    confirm_password: ''
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8000/signup', formData)
-      .then(res => {
-        console.log('User registered successfully:', res.data);
-        <Link to="/Login" />;
-      })
-      .catch(err => {
-        console.error('Error registering user:', err);
-        // Handle error
-        
+    try {
+      const response = await axios.post('http://localhost:8000/signup', formData, {
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken')
+        }
       });
+      console.log('User registered successfully:', response.data);
+    } catch (error) {
+      console.error('Error registering user:', error);
+    }
+  };
+
+  const getCookie = (name) => {
+    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return cookieValue ? cookieValue.pop() : '';
   };
 
   return (
@@ -42,7 +48,11 @@ const Signup = () => {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
         </div>
-        <button type="submit">Signup</button>
+        <div>
+          <label htmlFor="confirm_password">Confirm Password:</label>
+          <input type="password" id="confirm_password" name="confirm_password" value={formData.confirm_password} onChange={handleChange} required />
+        </div>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
