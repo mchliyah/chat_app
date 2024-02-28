@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from .serializer import *
 from .forms import UserCreationForm
+import os
 
 
 #TODO: i have to test this if it works after instalation 
@@ -50,7 +51,6 @@ class UserView(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
-@csrf_exempt
 def index(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -64,12 +64,12 @@ def index(request):
             # Handle invalid login credentials
             # You might want to display an error message in the template
     return render(request, "index.html", {})
-
-@csrf_exempt
+@api_view(['GET'])
 def login(request):
-    return redirect(request, "login.html", {
-        "username": request.user.username, # if the user is not loged in it will be an empty string
-    })
+    if request.user.is_authenticated:
+        return redirect('home')  # Redirect to the home page if the user is logged in
+    else:
+        return redirect('login.html')
 
 
 @login_required
@@ -82,11 +82,22 @@ def home(request):
 #         "username": request.user.username,
 #     })
 
+@api_view(['GET'])
+def csrftoken(request):
+    csrf_token = os.getenv('SUCRET_KEY')
+
+    if csrf_token:
+        return HttpResponse(csrf_token)
+    else:
+        return Response({"error": "CSRF token not found in environment variables"}, status=500)
+
+
+@api_view(['POST'])
 def signup(request):
     if request.method == 'POST':
         print ("methiod is post: ", request.POST.get('username'))
         form = UserCreationForm(request.POST)
-        # print (form)
+        print (form)
         if form.is_valid():
             print ("form is valid")
             form.save()
@@ -97,6 +108,36 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
+
+# def signup(request):
+#     if request.method == "POST":
+#         data = request.data
+#         username = data.get("username")
+#         email = data.get("email")
+#         password = data.get("password")
+#         confirm_password = data.get("confirm_password")
+        
+#         # Check if password matches confirmation
+#         if password != confirm_password:
+#             return Response({"error": "Passwords do not match"}, status=status.HTTP_400_BAD_REQUEST)
+
+#         # Create new user object
+#         try:
+#             user = User.objects.create_user(username, email, password)
+#             user.is_active = False
+            
+#             # Send activation email
+#             subject = f"Activate Your Account at Our Site!"
+#             message = f"To activate your account at our site, simply click the link below:\n\n{settings.BASE_URL}/activate/{user.activation_key}\n\nIf you did not create an account, please ignore this email."
+#             send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
+            
+#             user.save()
+#             return Response({"message": "Successfully created user! Activation email sent!"}, status=status.HTTP_201_CREATED)
+#         except Exception as e:
+#             print(f"An error occurred while creating user: {str(e)}")
+#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#     return Response({"error": "Method Not Allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 # def get_rooms(request):
 #     rooms = Room.objects.all()
 #     return HttpResponse(rooms)
@@ -113,7 +154,7 @@ def get_users(request):
 #     user_rooms = UserRoom.objects.filter(user__username=username)
 #     return HttpResponse(user_rooms)
 
-@csrf_exempt
+@api_view(['POST'])
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -126,7 +167,6 @@ def register(request):
 
 
 @login_required
-@csrf_exempt
 def send_message(request):
     if request.method == 'POST':
         message_text = request.POST.get('message_text')

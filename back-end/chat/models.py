@@ -18,8 +18,8 @@ class Message(models.Model):
 
 class User(models.Model):
     username = models.CharField(max_length=15) 
-    email = models.EmailField(max_length=30)    # i did't know that email is a field in django
-    password = models.CharField(max_length=128) 
+    email = models.EmailField(max_length=30)  
+    password = models.CharField(max_length=128)
 
     def __str__(self):
         return self.username

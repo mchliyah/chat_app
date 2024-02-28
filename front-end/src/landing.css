@@ -1,0 +1,78 @@
+:root {
+    --fakhti : #0a0e09;
+    --white: #705d5d;
+    --black: #000;
+    --koki: #7af06a;
+    box-sizing: border-box;
+}
+.navbar {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--fakhti);
+    height: 10%;
+
+  }
+  .logo {
+    margin-bottom: 10px;
+  }
+
+  .auth {
+    margin-top: 10px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+  }
+  .auth a{
+    text-decoration: none;
+    color: var(--black);
+    font-family: 'Krona One';
+    font-size: 16px;
+    padding-left: 45px;
+  }
+
+  .auth a:hover{
+    text-decoration: underline;
+    color: var(--fakhti);
+  }
+
+
+/*Search Bar*/
+
+.form button {
+  border: none;
+  background: none;
+  color: #8b8ba7;
+}
+
+.form {
+  --timing: 0.3s;
+  --width-of-input: 200px;
+  --height-of-input: 40px;
+  --border-height: 2px;
+  --input-bg: #E9ECEF;
+  --border-color: var(--fakhti);
+  --border-radius: 30px;
+  --after-border-radius: 1px;
+  position: relative;
+  width: var(--width-of-input);
+  height: var(--height-of-input);
+  display: flex;
+  align-items: center;
+  padding-inline: 0.8em;
+  border-radius: var(--border-radius);
+  transition: border-radius 0.5s ease;
+  background: var(--input-bg,#E9ECEF);
+  right: 10px;
+  margin-bottom: 5px;
+}
+
+.input {
+  font-size: 0.9rem;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  padding-inline: 0.5em;
+  padding-block: 0.7em;
+  border: none;
+}

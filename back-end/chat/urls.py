@@ -11,6 +11,7 @@ urlpatterns = [
     path("logout", auth_views.LogoutView.as_view(), name="logout"),  # URL for logging out
     path("signup", views.signup, name="signup"),
     path("register", views.register, name="register"),  # URL for registering
+    path("csrftoken", views.csrftoken, name="token"),
     # path("get_rooms/", views.get_rooms, name="get_rooms"),  # URL for getting all the chat rooms
     #path("get_messages/<str:room_name>/", views.get_messages, name="get_messages"),  # URL for getting all the messages in a chat room
     path("get_users", views.get_users, name="get_users"),  # URL for getting all the users

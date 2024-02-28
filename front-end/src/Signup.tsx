@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Signup = () => {
+  const csrftoken = '';
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -9,27 +10,46 @@ const Signup = () => {
     confirm_password: ''
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    const fetchCSRFToken = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/csrftoen`);
+        setFormData((prevData) => ({
+          ...prevData,
+          csrfToken: response.data.csrfToken
+        }));
+      } catch (error) {
+        console.error('Error fetching CSRF token:', error);
+      }
+    };
+
+    fetchCSRFToken();
+  }, []);
+
+  const handleChange = (e:any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    
     try {
-      const response = await axios.post('http://localhost:8000/signup', formData, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/signup`, formData, {
         headers: {
-          'X-CSRFToken': getCookie('csrftoken')
+          'X-CSRFToken': csrftoken, // Include CSRF token in the request headers
+          'Content-Type': 'application/json' // Set content type to JSON
         }
       });
-      console.log('User registered successfully:', response.data);
+      // await axios.post(`${process.env.REACT_APP_BACKEND_URL}/signu`, formData); // Replace '/api/signup' with your actual signup API endpoint
+      // Handle successful signup
     } catch (error) {
-      console.error('Error registering user:', error);
+      console.error('Error signing up:', error);
+      // Handle signup error
     }
-  };
-
-  const getCookie = (name) => {
-    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return cookieValue ? cookieValue.pop() : '';
   };
 
   return (

@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function LoginPage ({ onLogin }) {
+function Login (onLogin: any) {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    const fetchCSRFToken = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/csrftoken'); // Replace '/api/csrf-token' with your actual API endpoint
+        setFormData((prevData) => ({
+          ...prevData,
+          csrfToken: response.data.csrfToken
+        }));
+      } catch (error) {
+        console.error('Error fetching CSRF token:', error);
+      }
+    };
+
+    fetchCSRFToken();
+  }, []);
+
+  const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    axios.post('http://localhost:8000/login', formData)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/login`, formData)
       .then(res => {
         console.log('User logged in successfully:', res.data);
         // Call onLogin callback function with user data after successful login
@@ -43,4 +59,4 @@ function LoginPage ({ onLogin }) {
   );
 };
 
-export default LoginPage;
+export default Login;

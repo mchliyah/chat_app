@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
 # from django.core.management.utils import get_random_secret_key
 
 # SECRET_KEY = get_random_secret_key()
@@ -25,7 +30,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-dm=-z2-9rez7msyb5h)0xf8^j()o&+(m^bgak%(7*20t&gt92s"
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -106,11 +110,11 @@ ASGI_APPLICATION = 'chat_app.asgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "NAME": "mydb",
+        "USER": "myuser",
+        "PASSWORD": "mypassword",
         "HOST": "db",
-        "PORT": os.environ.get("POSTGRES_PORT"),
+        "PORT": "5432",
     }
 }
 
